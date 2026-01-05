@@ -53,7 +53,7 @@ function App() {
   const [gameScore, setGameScore] = useState<number>(0);
   const [movesCount, setMovesCount] = useState<number>(0);
   const [canFlip, setCanFlip] = useState<boolean>(true);
-
+  flippedCards;
 
 const checkWin = (pair: CardType[]) => {
   if (pair[0].value === pair[1].value) {
