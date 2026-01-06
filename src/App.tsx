@@ -54,6 +54,7 @@ function App() {
   const [movesCount, setMovesCount] = useState<number>(0);
   const [canFlip, setCanFlip] = useState<boolean>(true);
   flippedCards;
+  
 
 const checkWin = (pair: CardType[]) => {
   if (pair[0].value === pair[1].value) {
@@ -64,11 +65,22 @@ const checkWin = (pair: CardType[]) => {
           : c
       )
     );
-    setGameScore(prev => prev + 1);
-    console.log(gameScore+1, cardValues.length);
-    if (gameScore + 2 === cardValues.length) {
-      setTimeout(() => {alert(`You won in ${movesCount+1} moves! Starting new game.`);gameInit();setGameScore(0);setMovesCount(0);}, 500);
-    }
+
+    setGameScore(prevScore => {
+      const newScore = prevScore + 1;
+
+      if (newScore === cardValues.length) {
+        setTimeout(() => {
+          alert(`You won in ${movesCount+1} moves! Starting new game.`);
+          gameInit();
+          setGameScore(0);
+          setMovesCount(0);
+        }, 500);
+      }
+
+      return newScore;
+    });
+
   } else {
     setCards(prevCards =>
       prevCards.map(c =>
