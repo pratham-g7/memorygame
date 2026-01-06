@@ -75,7 +75,7 @@ const checkWin = (pair: CardType[]) => {
     );
 
     setGameScore(prevScore => {
-      const newScore = prevScore + 0.5;
+      const newScore = prevScore + 1;
 
       if (newScore === cardValues.length/2) {
         setTimeout(() => {
@@ -120,7 +120,7 @@ const flipCard = (card: CardType) => {
 
     if (next.length === 2) {
       setCanFlip(false);
-      setMovesCount(prev => prev + 0.5);
+      setMovesCount(prev => prev + 1);
       setTimeout(() => {checkWin(next);setCanFlip(true);}, 1111);
       
       return [];
