@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Card } from './components/card';
 import { GameHeader } from './components/gameHeader';
 import type { CardType } from './types/cardType';
+import { HighScore } from './components/highScore';
 
 const cardValues = [
   [
@@ -46,13 +47,20 @@ function App() {
     }));
     setCards(finalCards);
   };
+  
 
-  useEffect(() => {gameInit()}, [])
+  useEffect(() => {
+    gameInit();
+    const stored = Number(localStorage.getItem("highScore")) || 0;
+    setHighScore(stored);
+  }, []);
+
 
   const [flippedCards, setFlippedCards] = useState<CardType[]>([]);
   const [gameScore, setGameScore] = useState<number>(0);
   const [movesCount, setMovesCount] = useState<number>(0);
   const [canFlip, setCanFlip] = useState<boolean>(true);
+  const [highScore, setHighScore] = useState<number>(0);
   flippedCards;
   
 
@@ -69,9 +77,16 @@ const checkWin = (pair: CardType[]) => {
     setGameScore(prevScore => {
       const newScore = prevScore + 0.5;
 
-      if (newScore === cardValues.length) {
+      if (newScore === cardValues.length/2) {
         setTimeout(() => {
-          alert(`You won in ${movesCount+1} moves! Starting new game.`);
+          if (newScore > highScore) {
+            localStorage.setItem("highScore", newScore.toString());
+            setHighScore(newScore);
+            alert(`You won with a new High Score: ${newScore} points in ${movesCount+1} moves!\nStarting new game.`);
+          }
+          else{
+          alert(`You won in ${movesCount+1} moves!\nStarting new game.`);
+          }
           gameInit();
           setGameScore(0);
           setMovesCount(0);
@@ -119,6 +134,7 @@ const flipCard = (card: CardType) => {
   return (
     <div className="app">
       <GameHeader score={gameScore} moves={movesCount}/>
+      <HighScore score={highScore}/>
       <div className="cards-grid">
         {cards.map((iCard) => (
           <Card cardData={iCard} clickFunc={flipCard}/>
